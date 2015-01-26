@@ -1,10 +1,10 @@
 """Main script for our project."""
 
 
-source('Funtions/ReadingCoordsFromHTML.R')
+source('Functions/TextToRasterStack.R')
 
 ### Step 1: Downloading fluxtower data
-text_to_rasterstack(fn_cdcom)
+text_to_rasterstack("fn_cdcom")
 
 ### Step 2: Georeferencing fluxtower .txt file data (make function)
 
