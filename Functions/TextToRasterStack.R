@@ -28,7 +28,7 @@ text_to_rasterstack <- function(fluxtower){
   proj4string(spatialpoints) <- CRS(WGS84)
   Extent <- spTransform(spatialpoints, CRS(sinusoidal))
   
-  Datelist <- c()
+  Datelist <- as.numeric()
   NDVIlist <- c()
   for(i in 1:as.integer((length(data[,1])-5)/12)){
     n = (i-1)*12+5
@@ -36,7 +36,7 @@ text_to_rasterstack <- function(fluxtower){
     NDVI <- as.matrix(t(matrix(data=as.numeric(NDVI), ncol=28,nrow=28)))
     NDVI <- raster(NDVI,extent(Extent)[1],extent(Extent)[2],extent(Extent)[3],extent(Extent)[4],CRS(sinusoidal))
     NDVIlist <- c(NDVIlist, NDVI)
-    Datelist <- c(Datelist, as.numeric(substr(as.character(modis$HDFname[n]),10,16)))
+    Datelist <- append(Datelist, as.Date(strptime(paste(as.numeric(substr(as.character(data$HDFname[n]),10,13)), as.numeric(substr(as.character(data$HDFname[n]),14,16))), "%Y %j")))
   }
   stackNDVI <- stack(NDVIlist)
   names(stackNDVI) <- Datelist
@@ -48,5 +48,4 @@ attr(text_to_rasterstack, "help") <- "This function converts MODIS Fluxtower NDV
   The filename should be exactly the same as the flux tower list"
 describe(text_to_rasterstack)
 
-a = text_to_rasterstack("fn_nlloobos")
 # TASK: convert raster stack to animated gif
