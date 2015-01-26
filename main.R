@@ -1,5 +1,8 @@
 """Main script for our project."""
 
+setwd('/Functions')
+source('ReadingCoordsFromHTML.R')
+
 ### Step 1: Downloading fluxtower data
 
 ### Step 2: Georeferencing fluxtower .txt file data (make function)
