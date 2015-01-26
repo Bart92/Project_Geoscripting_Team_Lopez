@@ -5,7 +5,7 @@ library("rgdal")
 library("raster")
 
 ### Step 1: Downloading fluxtower data and converting it to raster stack.
-dataset <- "fn_nnloobos"
+dataset <- "fn_nlloobos"
 
 NDVI <- text_to_rasterstack(dataset)
 

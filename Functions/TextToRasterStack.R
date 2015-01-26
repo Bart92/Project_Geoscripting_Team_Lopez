@@ -6,7 +6,7 @@ source('Functions/ReadingCoordsFromHTML.R')
 
 # Write function.
 text_to_rasterstack <- function(fluxtower){
-  input_txt_file <- paste("ftp://daac.ornl.gov/data/modis_ascii_subsets/C5_MOD13Q1/data/MOD13Q1.",
+  input_txt_file <- paste("http://daac.ornl.gov/data/modis_ascii_subsets/C5_MOD13Q1/data/MOD13Q1.",
                     paste(fluxtower,".txt",sep = ""), sep = "")
   download.file(input_txt_file, paste(fluxtower,".txt",sep = ""))
   coordinate_matr <- html_to_coordlist(fluxtower)
