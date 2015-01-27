@@ -1,19 +1,49 @@
 """Main script for our project."""
 
+source('Functions/TextToRasterStack.R')
+library("rgdal")
+library("raster")
 
+<<<<<<< HEAD
 source('Functions/TextToRasterStack.R')
 
 ### Step 1: Downloading fluxtower data
-text_to_rasterstack("fn_cdcom")
 
 ### Step 2: Georeferencing fluxtower .txt file data (make function)
+=======
+### Step 1: Downloading fluxtower data and converting it to raster stack with only one funtion.
+dataset <- "fn_nlloobos"
+NDVI <- text_to_rasterstack(dataset)
+>>>>>>> 0e347377922e917b17fe86c6434265710b2fcbe4
 
 ### Step 3: Preforming supervised classification, forestcover classification
+coordinate_matr <- html_to_coordlist(dataset)
+filelink <- paste("http://commondatastorage.googleapis.com/earthenginepartners-hansen/GFC2014/Hansen_GFC2014_treecover2000_",(coordinate_matr[1,1]%/%10)*10+10,"N_0",if(coordinate_matr[1,2]%/%10==0){print("00")} else{print((coordinate_matr[1,2]%/%10)*10)},"E.png",sep="")
+download.file(filelink, paste("forestcover_",dataset,".tif",sep=""))
+#forestcover <- raster(paste("forestcover_",dataset,".tif",sep=""))
+forestcover <- raster("forestcover_fn_nlloobos.tif")
 
+sinusoidal <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
+forestcover <- spTransform(forestcover,list CRS(sinusoidal))
+forestcover <- crop(forestcover, NDVI)
+# @Bart: Ik kan de tif uberhaupt niet eens inlezen, volgens mij is er iets geks gebeurd tijdens het verkrijgen van de data.
 ### Step 4: Preform B-fast analysis for forest change during the years
 
 ### Step 5: Make interactive map with googlevis or rastervis package
-library(raster)
-b <- raster('data/ndvi.img')
-hist(b, 1, maxpixels=1000, plot=TRUE)
-plotRGB(a, 3, 2, 1, stretch='hist')
+# TASK: convert raster stack to animated gif
+for(i in 1:5){
+  png(filename = sprintf("Data/NDVI_%d.png",i))
+  plot(NDVI[[i]])
+  dev.off()    
+}
+
+# You will have to download ImageMagick to run this.
+make.mov <- function(){
+  unlink("plot.mpg")
+  system("convert -delay 3 NDVI_*.png NDVI.mpg")
+}
+setwd("Data/")
+make.mov()
+### @ Peter: ik krijg een .mpg file maar ik kan hem niet openen. Weet niet of dit aan mijn
+# mediaplayer ding ligt of aan de file zelf.
+
